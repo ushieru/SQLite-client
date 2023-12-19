@@ -1,4 +1,5 @@
 <script setup>
+import { ref } from 'vue'
 import Table from './Table.vue'
 import { useGlobalStore } from './../stores/GlobalStore'
 import { Tab } from '../models/Tab';
@@ -15,11 +16,25 @@ const props = defineProps({
 })
 
 const store = useGlobalStore()
+
+const name = ref(props.tab.name)
+
+const onClickTab = () => {
+    if (props.isChecked) {
+        document.getElementById(props.tab.name).showModal()
+    }
+    store.setCurrentTab(props.tab.id)
+}
+
+const onMouseHover = () => {
+    if (store.tabs.length == 1) return
+    if (props.isChecked) name.value = 'Close'
+}
 </script>
 
 <template>
-    <input type="radio" name="my_tabs_1" role="tab" class="tab" :aria-label="props.tab.name" :checked="props.isChecked"
-        @click="() => store.setCurrentTab(props.tab.id)" />
+    <input type="radio" name="my_tabs_1" role="tab" class="tab" :aria-label="name" :checked="props.isChecked"
+        @click="onClickTab" @mouseover="onMouseHover" @mouseleave="name = props.tab.name" />
     <div role="tabpanel" class="tab-content p-10 w-full h-full">
         <textarea class="textarea textarea-bordered w-full" v-model="tab.query" />
         <div class="flex justify-end gap-2">
@@ -33,4 +48,19 @@ const store = useGlobalStore()
             </div>
         </div>
     </div>
+    <dialog :id="props.tab.name" class="modal">
+        <div class="modal-box">
+            <h3 class="font-bold text-lg">{{ props.tab.name }}</h3>
+            <p class="py-4">Seguro que quieres cerrar esta pestaña?</p>
+            <div class="modal-action">
+                <form method="dialog">
+                    <button class="btn">No</button>
+                </form>
+                <button class="btn btn-primary" @click="() => store.closeTab(props.tab.id)">Si</button>
+            </div>
+        </div>
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+    </dialog>
 </template>

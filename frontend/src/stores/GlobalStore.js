@@ -23,6 +23,11 @@ export const useGlobalStore = defineStore('global', {
             this.currentTabId = tab.id
             this.tabs.push(tab)
         },
+        closeTab(tabId) {
+            if (this.tabs.length == 1) return
+            this.tabs = this.tabs.filter(tab => tab.id != tabId)
+            this.currentTabId = this.tabs[0].id
+        },
         getTables() {
             GetTables()
                 .then(tables => this.tables = tables)
