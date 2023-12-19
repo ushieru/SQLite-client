@@ -1,5 +1,8 @@
 import { defineStore } from 'pinia'
 import { Tab } from '../models/Tab'
+import {
+    ExecRawQuery, GetTables, GetViews, SelectTable
+} from '../../wailsjs/go/main/App'
 
 export const useGlobalStore = defineStore('global', {
     state: () => ({
@@ -21,15 +24,15 @@ export const useGlobalStore = defineStore('global', {
             this.tabs.push(tab)
         },
         getTables() {
-            window.go.main.App.GetTables()
+            GetTables()
                 .then(tables => this.tables = tables)
         },
         getViews() {
-            window.go.main.App.GetViews()
+            GetViews()
                 .then(views => this.views = views)
         },
         selectTable(tableName) {
-            window.go.main.App.SelectTable(tableName)
+            SelectTable(tableName)
                 .then(result => {
                     const tab = this.tabs.find(t => t.id == this.currentTabId)
                     tab.table = result
@@ -38,7 +41,7 @@ export const useGlobalStore = defineStore('global', {
         },
         execRawQuery() {
             const tab = this.tabs.find(t => t.id == this.currentTabId)
-            window.go.main.App.ExecRawQuery(tab.query)
+            ExecRawQuery(tab.query)
                 .then(result => {
                     if (!result.length) return
                     tab.table = result
