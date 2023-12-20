@@ -7,4 +7,6 @@ export function GetTables():Promise<Array<{[key: string]: any}>>;
 
 export function GetViews():Promise<Array<{[key: string]: any}>>;
 
+export function NewDatabase(arg1:string):Promise<void>;
+
 export function SelectTable(arg1:string):Promise<Array<{[key: string]: any}>>;

@@ -9,6 +9,6 @@ import (
 const InMemory = ":memory:"
 
 func GetDatabase(name string) (*sql.DB, error) {
-	db, err := sql.Open("sqlite", "db.db")
+	db, err := sql.Open("sqlite", name)
 	return db, err
 }

@@ -24,6 +24,12 @@ func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 }
 
+func (a *App) NewDatabase(name string) {
+	a.auxDB.Close()
+	db, _ := database.GetDatabase(name)
+	a.auxDB = db
+}
+
 func (a *App) GetTables() []map[string]interface{} {
 	rows, err := a.auxDB.Query("SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%'")
 	if err != nil {

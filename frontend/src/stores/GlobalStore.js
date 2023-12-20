@@ -1,12 +1,13 @@
 import { defineStore } from 'pinia'
 import { Tab } from '../models/Tab'
 import {
-    ExecRawQuery, GetTables, GetViews, SelectTable
+    ExecRawQuery, GetTables, GetViews, SelectTable, NewDatabase
 } from '../../wailsjs/go/main/App'
 
 export const useGlobalStore = defineStore('global', {
     state: () => ({
         currentTabId: 1,
+        databaseName: ":memory:",
         tabs: [new Tab("Tab 1", "", 1)],
         tables: [],
         views: [],
@@ -15,6 +16,16 @@ export const useGlobalStore = defineStore('global', {
     actions: {
         setCurrentTab(tabId) {
             this.currentTabId = tabId
+        },
+        newDatabase(databaseName) {
+            if (!databaseName.includes(".")) {
+                databaseName = `${databaseName}.db`
+            }
+            NewDatabase(databaseName).then(_ => {
+                this.databaseName = databaseName
+                this.getTables()
+                this.getViews()
+            })
         },
         newTab() {
             const name = `Tab ${this._internalTabConter}`
@@ -44,12 +55,16 @@ export const useGlobalStore = defineStore('global', {
                     tab.query = `SELECT * FROM ${tableName} LIMIT 100`
                 })
         },
-        execRawQuery() {
-            const tab = this.tabs.find(t => t.id == this.currentTabId)
+        execRawQuery(tab) {
             ExecRawQuery(tab.query)
                 .then(result => {
                     if (!result.length) return
                     tab.table = result
+                }).then(_ => {
+                    if (tab.query.toLowerCase().includes("create")) {
+                        this.getTables()
+                        this.getViews()
+                    }
                 })
         }
     }

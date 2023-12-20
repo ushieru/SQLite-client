@@ -14,6 +14,10 @@ export function GetViews() {
   return window['go']['main']['App']['GetViews']();
 }
 
+export function NewDatabase(arg1) {
+  return window['go']['main']['App']['NewDatabase'](arg1);
+}
+
 export function SelectTable(arg1) {
   return window['go']['main']['App']['SelectTable'](arg1);
 }

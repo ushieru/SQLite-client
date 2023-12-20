@@ -38,7 +38,7 @@ const onMouseHover = () => {
     <div role="tabpanel" class="tab-content p-10 w-full h-full">
         <textarea class="textarea textarea-bordered w-full" v-model="tab.query" />
         <div class="flex justify-end gap-2">
-            <button class="btn" @click="store.execRawQuery">Run</button>
+            <button class="btn" @click="() => store.execRawQuery(props.tab)">Run</button>
             <button class="btn">Save</button>
         </div>
         <div class="divider"></div>
