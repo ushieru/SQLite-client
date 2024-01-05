@@ -10,4 +10,8 @@ export function GetViews():Promise<Array<string>>;
 
 export function NewDatabase(arg1:string):Promise<void>;
 
+export function OpenDatabase():Promise<string>;
+
+export function OpenInMemoryDatabase():Promise<string>;
+
 export function SelectTable(arg1:string):Promise<models.SQLResult>;

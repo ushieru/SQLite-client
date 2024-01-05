@@ -28,9 +28,9 @@ const onSubmitNewDatabaseModal = (e) => {
         <div class="dropdown">
             <div tabindex="0" role="button" class="btn m-1">▼</div>
             <ul tabindex="0" class="dropdown-content z-10 menu p-2 shadow bg-base-100 rounded-box w-52">
-                <li><a>New in-memory</a></li>
+                <li @click="store.openInMemoryDatabase"><a>New in-memory</a></li>
                 <li @click="showNewDatabaseModal"><a>New database</a></li>
-                <li><a>Open database</a></li>
+                <li @click="store.openDatabase"><a>Open database</a></li>
                 <div class="divider m-0" />
                 <li><a>Close database</a></li>
             </ul>

@@ -7,6 +7,9 @@ import (
 	"pinguino/database"
 	"pinguino/models"
 	"pinguino/utils"
+	"strings"
+
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 type App struct {
@@ -27,7 +30,10 @@ func (a *App) startup(ctx context.Context) {
 
 func (a *App) NewDatabase(name string) {
 	a.auxDB.Close()
-	db, _ := database.GetDatabase(name)
+	db, err := database.GetDatabase(name)
+	if err != nil {
+		fmt.Println("Error al abrir db")
+	}
 	a.auxDB = db
 }
 
@@ -79,4 +85,19 @@ func (a *App) ExecRawQuery(query string) (*models.SQLResult, error) {
 	fmt.Println(r.Rows)
 	fmt.Println(r.Headers)
 	return r, nil
+}
+
+func (a *App) OpenDatabase() string {
+	fileName, err := runtime.OpenFileDialog(a.ctx, runtime.OpenDialogOptions{})
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	a.NewDatabase(fileName)
+	nameSlice := strings.Split(fileName, "/")
+	return nameSlice[len(nameSlice)-1]
+}
+
+func (a *App) OpenInMemoryDatabase() string {
+	a.NewDatabase(database.InMemory)
+	return database.InMemory
 }

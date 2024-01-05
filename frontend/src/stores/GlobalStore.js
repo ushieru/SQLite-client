@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { Tab } from '../models/Tab'
 import {
-    ExecRawQuery, GetTables, GetViews, SelectTable, NewDatabase
+    ExecRawQuery, GetTables, GetViews, SelectTable, NewDatabase, OpenDatabase, OpenInMemoryDatabase,
 } from '../../wailsjs/go/main/App'
 
 export const useGlobalStore = defineStore('global', {
@@ -16,16 +16,6 @@ export const useGlobalStore = defineStore('global', {
     actions: {
         setCurrentTab(tabId) {
             this.currentTabId = tabId
-        },
-        newDatabase(databaseName) {
-            if (!databaseName.includes(".")) {
-                databaseName = `${databaseName}.db`
-            }
-            NewDatabase(databaseName).then(_ => {
-                this.databaseName = databaseName
-                this.getTables()
-                this.getViews()
-            })
         },
         newTab() {
             const name = `Tab ${this._internalTabConter}`
@@ -66,6 +56,30 @@ export const useGlobalStore = defineStore('global', {
                         this.getViews()
                     }
                 })
-        }
+        },
+        newDatabase(databaseName) {
+            if (!databaseName.includes(".")) {
+                databaseName = `${databaseName}.db`
+            }
+            NewDatabase(databaseName).then(_ => {
+                this.databaseName = databaseName
+                this.getTables()
+                this.getViews()
+            })
+        },
+        openInMemoryDatabase() {
+            OpenInMemoryDatabase().then(dbName => {
+                this.databaseName = dbName
+                this.getTables()
+                this.getViews()
+            })
+        },
+        openDatabase() {
+            OpenDatabase().then(dbName => {
+                this.databaseName = dbName
+                this.getTables()
+                this.getViews()
+            })
+        },
     }
 })

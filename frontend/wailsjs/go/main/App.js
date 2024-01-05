@@ -18,6 +18,14 @@ export function NewDatabase(arg1) {
   return window['go']['main']['App']['NewDatabase'](arg1);
 }
 
+export function OpenDatabase() {
+  return window['go']['main']['App']['OpenDatabase']();
+}
+
+export function OpenInMemoryDatabase() {
+  return window['go']['main']['App']['OpenInMemoryDatabase']();
+}
+
 export function SelectTable(arg1) {
   return window['go']['main']['App']['SelectTable'](arg1);
 }
