@@ -8,28 +8,21 @@ const props = defineProps({
         required: true,
     }
 })
-
-const headers = computed(() => {
-    const headers = Object.keys(props.tab.table[0])
-    if (headers.find(h => h == 'id'))
-        return ['id', ...headers.filter(h => h != 'id')]
-    return headers
-})
 </script>
 
 <template>
-    <table v-if="props.tab.table.length" class="table table-zebra">
+    <table v-if="props.tab.table?.Headers?.length" class="table table-zebra">
         <thead>
             <tr>
-                <th v-for="header in headers">
+                <th v-for="header in props.tab.table.Headers">
                     {{ header }}
                 </th>
             </tr>
         </thead>
         <tbody>
-            <tr v-for="row in props.tab.table">
-                <th v-for="header in headers">
-                    {{ row[header] }}
+            <tr v-for="row in props.tab.table.Rows">
+                <th v-for="value in row">
+                    {{ value }}
                 </th>
             </tr>
         </tbody>

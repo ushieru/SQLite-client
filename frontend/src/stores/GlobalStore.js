@@ -52,13 +52,13 @@ export const useGlobalStore = defineStore('global', {
                 .then(result => {
                     const tab = this.tabs.find(t => t.id == this.currentTabId)
                     tab.table = result
+                    console.log(result)
                     tab.query = `SELECT * FROM ${tableName} LIMIT 100`
                 })
         },
         execRawQuery(tab) {
             ExecRawQuery(tab.query)
                 .then(result => {
-                    if (!result.length) return
                     tab.table = result
                 }).then(_ => {
                     if (tab.query.toLowerCase().includes("create")) {

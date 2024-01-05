@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"pinguino/database"
+	"pinguino/models"
 	"pinguino/utils"
 )
 
@@ -30,38 +31,52 @@ func (a *App) NewDatabase(name string) {
 	a.auxDB = db
 }
 
-func (a *App) GetTables() []map[string]interface{} {
+func (a *App) GetTables() []string {
 	rows, err := a.auxDB.Query("SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%'")
 	if err != nil {
-		return make([]map[string]interface{}, 0)
+		return make([]string, 0)
 	}
-	mapRows, _ := utils.SQLRowsToMaps(rows)
-	return mapRows
+	r, _ := utils.SQLRowsToSlice(rows)
+	tables := make([]string, 0)
+	for _, row := range r.Rows {
+		if val, ok := row[0].(string); ok {
+			tables = append(tables, val)
+		}
+	}
+	return tables
 }
 
-func (a *App) GetViews() []map[string]interface{} {
+func (a *App) GetViews() []string {
 	rows, err := a.auxDB.Query("SELECT name FROM sqlite_master WHERE type = 'view' AND name NOT LIKE 'sqlite_%'")
 	if err != nil {
-		return make([]map[string]interface{}, 0)
+		return make([]string, 0)
 	}
-	mapRows, _ := utils.SQLRowsToMaps(rows)
-	return mapRows
+	r, _ := utils.SQLRowsToSlice(rows)
+	tables := make([]string, 0)
+	for _, row := range r.Rows {
+		if val, ok := row[0].(string); ok {
+			tables = append(tables, val)
+		}
+	}
+	return tables
 }
 
-func (a *App) SelectTable(tableName string) []map[string]interface{} {
+func (a *App) SelectTable(tableName string) (*models.SQLResult, error) {
 	rows, err := a.auxDB.Query(fmt.Sprintf("SELECT * FROM %s LIMIT 100", tableName))
 	if err != nil {
-		return make([]map[string]interface{}, 0)
+		return nil, err
 	}
-	mapRows, _ := utils.SQLRowsToMaps(rows)
-	return mapRows
+	r, _ := utils.SQLRowsToSlice(rows)
+	return r, nil
 }
 
-func (a *App) ExecRawQuery(query string) []map[string]interface{} {
+func (a *App) ExecRawQuery(query string) (*models.SQLResult, error) {
 	rows, err := a.auxDB.Query(query)
 	if err != nil {
-		return make([]map[string]interface{}, 0)
+		return nil, err
 	}
-	mapRows, _ := utils.SQLRowsToMaps(rows)
-	return mapRows
+	r, _ := utils.SQLRowsToSlice(rows)
+	fmt.Println(r.Rows)
+	fmt.Println(r.Headers)
+	return r, nil
 }

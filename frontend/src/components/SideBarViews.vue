@@ -11,7 +11,7 @@ const store = useGlobalStore()
             Views
         </div>
         <div class="collapse-content flex flex-col">
-            <button class="btn" v-for="{ name } in store.views" @click="() => store.selectTable(name)">
+            <button class="btn" v-for="name in store.views" @click="() => store.selectTable(name)">
                 {{ name }}
             </button>
         </div>

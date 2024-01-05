@@ -1,10 +1,13 @@
 package utils
 
-import "database/sql"
+import (
+	"database/sql"
+	"pinguino/models"
+)
 
-func SQLRowsToMaps(rows *sql.Rows) ([]map[string]interface{}, error) {
+func SQLRowsToSlice(rows *sql.Rows) (*models.SQLResult, error) {
 	cols, _ := rows.Columns()
-	results := make([]map[string]interface{}, 0)
+	results := make([][]interface{}, 0)
 	for rows.Next() {
 		columns := make([]interface{}, len(cols))
 		columnPointers := make([]interface{}, len(cols))
@@ -14,12 +17,16 @@ func SQLRowsToMaps(rows *sql.Rows) ([]map[string]interface{}, error) {
 		if err := rows.Scan(columnPointers...); err != nil {
 			return nil, err
 		}
-		m := make(map[string]interface{})
-		for i, colName := range cols {
+		m := make([]interface{}, 0)
+		for i := range cols {
 			val := columnPointers[i].(*interface{})
-			m[colName] = *val
+			m = append(m, *val)
 		}
 		results = append(results, m)
 	}
-	return results, nil
+	result := models.SQLResult{
+		Headers: cols,
+		Rows:    results,
+	}
+	return &result, nil
 }

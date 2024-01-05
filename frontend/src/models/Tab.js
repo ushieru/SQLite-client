@@ -3,6 +3,6 @@ export class Tab {
         this.id = id ?? Date.now()
         this.name = name
         this.query = query
-        this.table = []
+        this.table = {}
     }
 }
