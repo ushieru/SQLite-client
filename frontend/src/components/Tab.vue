@@ -3,6 +3,9 @@ import { ref } from 'vue'
 import Table from './Table.vue'
 import { useGlobalStore } from './../stores/GlobalStore'
 import { Tab } from '../models/Tab';
+import { Codemirror } from 'vue-codemirror'
+import { sql, SQLite } from '@codemirror/lang-sql'
+import { oneDark } from '@codemirror/theme-one-dark'
 
 const props = defineProps({
     tab: {
@@ -30,14 +33,16 @@ const onMouseHover = () => {
     if (store.tabs.length == 1) return
     if (props.isChecked) name.value = 'Close'
 }
+
+const extentions = [sql({ dialect: SQLite }), oneDark]
 </script>
 
 <template>
     <input type="radio" name="my_tabs_1" role="tab" class="tab" :aria-label="name" :checked="props.isChecked"
         @click="onClickTab" @mouseover="onMouseHover" @mouseleave="name = props.tab.name" />
     <div role="tabpanel" class="tab-content p-10 w-full h-full">
-        <textarea class="textarea textarea-bordered w-full" v-model="tab.query" />
-        <div class="flex justify-end gap-2">
+        <Codemirror :extensions="extentions" v-model="tab.query" :style="{ height: '100px' }" />
+        <div class="flex justify-end gap-2 mt-1">
             <button class="btn" @click="() => store.execRawQuery(props.tab)">Run</button>
             <button class="btn">Save</button>
         </div>
