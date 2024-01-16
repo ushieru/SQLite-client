@@ -6,6 +6,10 @@ export function ExecRawQuery(arg1) {
   return window['go']['main']['App']['ExecRawQuery'](arg1);
 }
 
+export function GetScripts() {
+  return window['go']['main']['App']['GetScripts']();
+}
+
 export function GetTables() {
   return window['go']['main']['App']['GetTables']();
 }
@@ -24,6 +28,10 @@ export function OpenDatabase() {
 
 export function OpenInMemoryDatabase() {
   return window['go']['main']['App']['OpenInMemoryDatabase']();
+}
+
+export function ReadFile(arg1) {
+  return window['go']['main']['App']['ReadFile'](arg1);
 }
 
 export function SaveFile(arg1, arg2) {

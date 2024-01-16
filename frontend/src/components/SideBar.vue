@@ -2,6 +2,7 @@
 import SideBarTables from './SideBarTables.vue';
 import SideBarViews from './SideBarViews.vue';
 import SideBarTriggers from './SideBarTriggers.vue';
+import SideBarScripts from './SideBarScripts.vue';
 import { useGlobalStore } from './../stores/GlobalStore'
 
 const store = useGlobalStore()
@@ -41,6 +42,7 @@ const onSubmitNewDatabaseModal = (e) => {
         <SideBarTables />
         <SideBarViews />
         <SideBarTriggers />
+        <SideBarScripts />
     </div>
     <dialog id="new_database_modal" class="modal">
         <div class="modal-box">

@@ -4,6 +4,8 @@ import {models} from '../models';
 
 export function ExecRawQuery(arg1:string):Promise<models.SQLResult>;
 
+export function GetScripts():Promise<Array<string>>;
+
 export function GetTables():Promise<Array<string>>;
 
 export function GetViews():Promise<Array<string>>;
@@ -13,6 +15,8 @@ export function NewDatabase(arg1:string):Promise<void>;
 export function OpenDatabase():Promise<string>;
 
 export function OpenInMemoryDatabase():Promise<string>;
+
+export function ReadFile(arg1:string):Promise<string>;
 
 export function SaveFile(arg1:string,arg2:string):Promise<boolean>;
 

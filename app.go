@@ -125,3 +125,32 @@ func (a *App) SaveFile(fileName, payload string) bool {
 	file.Close()
 	return true
 }
+
+func (a *App) GetScripts() []string {
+	scripts := make([]string, 0)
+	if _, err := os.Stat("scripts"); os.IsNotExist(err) {
+		return scripts
+	}
+	cleanBdName := strings.Split(a.dbName, ".")[0]
+	workDir := filepath.Join("scripts", cleanBdName)
+	if _, err := os.Stat(workDir); os.IsNotExist(err) {
+		return scripts
+	}
+	filepath.Walk(workDir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return nil
+		}
+		if !info.IsDir() && filepath.Ext(path) == ".sql" {
+			nameSlice := strings.Split(path, string(filepath.Separator))
+			scripts = append(scripts, nameSlice[len(nameSlice)-1])
+		}
+		return nil
+	})
+	return scripts
+}
+
+func (a *App) ReadFile(fileName string) string {
+	cleanBdName := strings.Split(a.dbName, ".")[0]
+	content, _ := os.ReadFile(filepath.Join("scripts", cleanBdName, fileName))
+	return string(content)
+}
