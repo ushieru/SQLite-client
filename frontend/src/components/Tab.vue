@@ -22,11 +22,22 @@ const store = useGlobalStore()
 
 const name = ref(props.tab.name)
 
+const filename = ref("")
+
 const onClickTab = () => {
     if (props.isChecked) {
         document.getElementById(props.tab.name).showModal()
     }
     store.setCurrentTab(props.tab.id)
+}
+
+const onClickSave = () => {
+    document.getElementById(props.tab.name + 'save').showModal()
+}
+
+const saveFile = () => {
+    document.getElementById(props.tab.name + 'save').close()
+    store.saveFile(filename, props.tab.query)
 }
 
 const onMouseHover = () => {
@@ -44,7 +55,7 @@ const extentions = [sql({ dialect: SQLite }), oneDark]
         <Codemirror :extensions="extentions" v-model="tab.query" :style="{ height: '100px' }" />
         <div class="flex justify-end gap-2 mt-1">
             <button class="btn" @click="() => store.execRawQuery(props.tab)">Run</button>
-            <button class="btn">Save</button>
+            <button class="btn" @click="onClickSave">Save</button>
         </div>
         <div class="divider"></div>
         <div class="card bg-base-100 shadow-xl">
@@ -61,7 +72,25 @@ const extentions = [sql({ dialect: SQLite }), oneDark]
                 <form method="dialog">
                     <button class="btn">No</button>
                 </form>
-                <button class="btn btn-primary" @click="() => store.closeTab(props.tab.id)">Si</button>
+                <button class="btn btn-primary" @click="saveFile">Si</button>
+            </div>
+        </div>
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+    </dialog>
+    <dialog :id="props.tab.name + 'save'" class="modal">
+        <div class="modal-box">
+            <h3 class="font-bold text-lg">Guardar archivo</h3>
+            <p class="py-4">Seguro que quieres guardar este script?</p>
+            <code class="max-h-24">{{ props.tab.query }}</code>
+            <h3 class="font-bold text-lg py-2">Nombre del archivo</h3>
+            <input type="text" v-model="filename" class="input input-bordered w-full max-w-xs">
+            <div class="modal-action">
+                <form method="dialog">
+                    <button class="btn">No</button>
+                </form>
+                <button class="btn btn-primary" @click="() => store.saveFile(filename, props.tab.query)">Si</button>
             </div>
         </div>
         <form method="dialog" class="modal-backdrop">

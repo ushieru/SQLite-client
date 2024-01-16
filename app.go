@@ -4,6 +4,8 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"os"
+	"path/filepath"
 	"pinguino/database"
 	"pinguino/models"
 	"pinguino/utils"
@@ -13,14 +15,16 @@ import (
 )
 
 type App struct {
-	ctx   context.Context
-	auxDB *sql.DB
+	ctx    context.Context
+	auxDB  *sql.DB
+	dbName string
 }
 
 func NewApp() *App {
 	db, _ := database.GetDatabase(database.InMemory)
 	return &App{
-		auxDB: db,
+		auxDB:  db,
+		dbName: database.InMemory,
 	}
 }
 
@@ -91,6 +95,8 @@ func (a *App) OpenDatabase() string {
 	fileName, err := runtime.OpenFileDialog(a.ctx, runtime.OpenDialogOptions{})
 	if err != nil {
 		fmt.Println(err.Error())
+		nameSlice := strings.Split(a.dbName, "/")
+		return nameSlice[len(nameSlice)-1]
 	}
 	a.NewDatabase(fileName)
 	nameSlice := strings.Split(fileName, "/")
@@ -100,4 +106,22 @@ func (a *App) OpenDatabase() string {
 func (a *App) OpenInMemoryDatabase() string {
 	a.NewDatabase(database.InMemory)
 	return database.InMemory
+}
+
+func (a *App) SaveFile(fileName, payload string) bool {
+	if _, err := os.Stat("scripts"); os.IsNotExist(err) {
+		os.Mkdir("scripts", os.ModePerm)
+	}
+	cleanBdName := strings.Split(a.dbName, ".")[0]
+	if _, err := os.Stat(filepath.Join("scripts", cleanBdName)); os.IsNotExist(err) {
+		os.Mkdir(filepath.Join("scripts", cleanBdName), os.ModePerm)
+	}
+	formatedName := fmt.Sprintf("%s.sql", fileName)
+	file, err := os.Create(filepath.Join("scripts", cleanBdName, formatedName))
+	if err != nil {
+		return false
+	}
+	file.Write([]byte(payload))
+	file.Close()
+	return true
 }

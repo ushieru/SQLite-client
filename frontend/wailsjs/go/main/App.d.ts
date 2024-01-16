@@ -14,4 +14,6 @@ export function OpenDatabase():Promise<string>;
 
 export function OpenInMemoryDatabase():Promise<string>;
 
+export function SaveFile(arg1:string,arg2:string):Promise<boolean>;
+
 export function SelectTable(arg1:string):Promise<models.SQLResult>;

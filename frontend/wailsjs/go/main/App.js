@@ -26,6 +26,10 @@ export function OpenInMemoryDatabase() {
   return window['go']['main']['App']['OpenInMemoryDatabase']();
 }
 
+export function SaveFile(arg1, arg2) {
+  return window['go']['main']['App']['SaveFile'](arg1, arg2);
+}
+
 export function SelectTable(arg1) {
   return window['go']['main']['App']['SelectTable'](arg1);
 }

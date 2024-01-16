@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { Tab } from '../models/Tab'
 import {
-    ExecRawQuery, GetTables, GetViews, SelectTable, NewDatabase, OpenDatabase, OpenInMemoryDatabase,
+    ExecRawQuery, GetTables, GetViews, SelectTable, NewDatabase, OpenDatabase, OpenInMemoryDatabase, SaveFile,
 } from '../../wailsjs/go/main/App'
 
 export const useGlobalStore = defineStore('global', {
@@ -42,7 +42,6 @@ export const useGlobalStore = defineStore('global', {
                 .then(result => {
                     const tab = this.tabs.find(t => t.id == this.currentTabId)
                     tab.table = result
-                    console.log(result)
                     tab.query = `SELECT * FROM ${tableName} LIMIT 100`
                 })
         },
@@ -79,6 +78,11 @@ export const useGlobalStore = defineStore('global', {
                 this.databaseName = dbName
                 this.getTables()
                 this.getViews()
+            })
+        },
+        saveFile(title, payload) {
+            SaveFile(title, payload).then(res => {
+                console.log(res)
             })
         },
     }
