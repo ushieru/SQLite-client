@@ -39,7 +39,6 @@ func (a *App) NewDatabase(name string) {
 		fmt.Println("Error al abrir db")
 	}
 	a.auxDB = db
-	a.dbName = name
 }
 
 func (a *App) GetTables() []string {
@@ -110,7 +109,9 @@ func (a *App) OpenDatabase() string {
 	}
 	a.NewDatabase(fileName)
 	nameSlice := strings.Split(fileName, "/")
-	return nameSlice[len(nameSlice)-1]
+	cleanName := nameSlice[len(nameSlice)-1]
+	a.dbName = cleanName
+	return cleanName
 }
 
 func (a *App) OpenInMemoryDatabase() string {

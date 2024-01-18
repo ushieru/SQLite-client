@@ -36,8 +36,8 @@ const onClickSave = () => {
 }
 
 const saveFile = () => {
+    store.saveFile(filename.value, props.tab.query)
     document.getElementById(props.tab.name + 'save').close()
-    store.saveFile(filename, props.tab.query)
 }
 
 const onMouseHover = () => {
@@ -72,7 +72,7 @@ const extentions = [sql({ dialect: SQLite }), oneDark]
                 <form method="dialog">
                     <button class="btn">No</button>
                 </form>
-                <button class="btn btn-primary" @click="saveFile">Si</button>
+                <button class="btn btn-primary" @click="() => store.closeTab(store.currentTabId)">Si</button>
             </div>
         </div>
         <form method="dialog" class="modal-backdrop">
@@ -90,7 +90,7 @@ const extentions = [sql({ dialect: SQLite }), oneDark]
                 <form method="dialog">
                     <button class="btn">No</button>
                 </form>
-                <button class="btn btn-primary" @click="() => store.saveFile(filename, props.tab.query)">Si</button>
+                <button class="btn btn-primary" @click="saveFile">Si</button>
             </div>
         </div>
         <form method="dialog" class="modal-backdrop">
