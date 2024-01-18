@@ -95,8 +95,6 @@ func (a *App) ExecRawQuery(query string) (*models.SQLResult, error) {
 		return nil, err
 	}
 	r, _ := utils.SQLRowsToSlice(rows)
-	fmt.Println(r.Rows)
-	fmt.Println(r.Headers)
 	return r, nil
 }
 
