@@ -1,5 +1,4 @@
 <script setup>
-import { computed } from 'vue';
 import { Tab } from '../models/Tab';
 
 const props = defineProps({
