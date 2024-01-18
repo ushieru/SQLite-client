@@ -8,6 +8,8 @@ export function GetScripts():Promise<Array<string>>;
 
 export function GetTables():Promise<Array<string>>;
 
+export function GetTriggers():Promise<Array<any>>;
+
 export function GetViews():Promise<Array<string>>;
 
 export function NewDatabase(arg1:string):Promise<void>;

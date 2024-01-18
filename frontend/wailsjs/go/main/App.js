@@ -14,6 +14,10 @@ export function GetTables() {
   return window['go']['main']['App']['GetTables']();
 }
 
+export function GetTriggers() {
+  return window['go']['main']['App']['GetTriggers']();
+}
+
 export function GetViews() {
   return window['go']['main']['App']['GetViews']();
 }

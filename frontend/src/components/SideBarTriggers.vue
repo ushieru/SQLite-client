@@ -1,4 +1,12 @@
 <script setup>
+import { useGlobalStore } from './../stores/GlobalStore'
+
+const store = useGlobalStore()
+
+const onClickTrigger = (trigger) => {
+    const tab = store.tabs.find(t => t.id == store.currentTabId)
+    tab.query = trigger.sql
+}
 </script>
 
 <template>
@@ -8,6 +16,9 @@
             Triggers
         </div>
         <div class="collapse-content flex flex-col">
+            <button class="btn truncate" v-for="trigger in store.triggers" @click="() => onClickTrigger(trigger)">
+                {{ trigger.name }}
+            </button>
         </div>
     </div>
 </template>

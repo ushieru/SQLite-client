@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia'
 import { Tab } from '../models/Tab'
+import { Trigger } from '../models/Trigger'
 import {
-    ExecRawQuery, GetTables, GetViews, GetScripts, SelectTable, NewDatabase, OpenDatabase, OpenInMemoryDatabase, SaveFile, ReadFile,
+    ExecRawQuery, GetTables, GetViews, GetTriggers, GetScripts, SelectTable, NewDatabase, OpenDatabase, OpenInMemoryDatabase, SaveFile, ReadFile,
 } from '../../wailsjs/go/main/App'
 
 export const useGlobalStore = defineStore('global', {
@@ -11,6 +12,7 @@ export const useGlobalStore = defineStore('global', {
         tabs: [new Tab("Tab 1", "", 1)],
         tables: [],
         views: [],
+        triggers: [],
         scripts: [],
         _internalTabConter: 2,
     }),
@@ -38,9 +40,18 @@ export const useGlobalStore = defineStore('global', {
             GetViews()
                 .then(views => this.views = views)
         },
+        getTriggers() {
+            GetTriggers().then(triggers => this.triggers = triggers.map(t => new Trigger(t[0], t[1])))
+        },
         getScripts() {
             GetScripts()
                 .then(scripts => this.scripts = scripts)
+        },
+        refreshSidebar() {
+            this.getTables()
+            this.getViews()
+            this.getTriggers()
+            this.getScripts()
         },
         selectTable(tableName) {
             SelectTable(tableName)
@@ -56,8 +67,7 @@ export const useGlobalStore = defineStore('global', {
                     tab.table = result
                 }).then(_ => {
                     if (tab.query.toLowerCase().includes("create")) {
-                        this.getTables()
-                        this.getViews()
+                        this.refreshSidebar()
                     }
                 })
         },
@@ -67,23 +77,19 @@ export const useGlobalStore = defineStore('global', {
             }
             NewDatabase(databaseName).then(_ => {
                 this.databaseName = databaseName
-                this.getTables()
-                this.getViews()
+                this.refreshSidebar()
             })
         },
         openInMemoryDatabase() {
             OpenInMemoryDatabase().then(dbName => {
                 this.databaseName = dbName
-                this.getTables()
-                this.getViews()
+                this.refreshSidebar()
             })
         },
         openDatabase() {
             OpenDatabase().then(dbName => {
                 this.databaseName = dbName
-                this.getTables()
-                this.getViews()
-                this.getScripts()
+                this.refreshSidebar()
             })
         },
         saveFile(title, payload) {

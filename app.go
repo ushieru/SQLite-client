@@ -39,6 +39,7 @@ func (a *App) NewDatabase(name string) {
 		fmt.Println("Error al abrir db")
 	}
 	a.auxDB = db
+	a.dbName = name
 }
 
 func (a *App) GetTables() []string {
@@ -69,6 +70,15 @@ func (a *App) GetViews() []string {
 		}
 	}
 	return tables
+}
+
+func (a *App) GetTriggers() [][]interface{} {
+	rows, err := a.auxDB.Query("SELECT name, sql FROM sqlite_master WHERE type = 'trigger' AND name NOT LIKE 'sqlite_%'")
+	if err != nil {
+		return make([][]interface{}, 0)
+	}
+	r, _ := utils.SQLRowsToSlice(rows)
+	return r.Rows
 }
 
 func (a *App) SelectTable(tableName string) (*models.SQLResult, error) {
