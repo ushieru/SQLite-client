@@ -52,7 +52,7 @@ const extentions = [sql({ dialect: SQLite }), oneDark]
     <input type="radio" name="my_tabs_1" role="tab" class="tab" :aria-label="name" :checked="props.isChecked"
         @click="onClickTab" @mouseover="onMouseHover" @mouseleave="name = props.tab.name" />
     <div role="tabpanel" class="tab-content p-10 w-full h-full">
-        <Codemirror :extensions="extentions" v-model="tab.query" :style="{ height: '100px' }" />
+        <Codemirror :extensions="extentions" v-model="tab.query" :style="{ height: '150px' }" />
         <div class="flex justify-end gap-2 mt-1">
             <button class="btn" @click="() => store.execRawQuery(props.tab)">Run</button>
             <button class="btn" @click="onClickSave">Save</button>
