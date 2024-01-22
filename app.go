@@ -114,6 +114,7 @@ func (a *App) OpenDatabase() string {
 
 func (a *App) OpenInMemoryDatabase() string {
 	a.NewDatabase(database.InMemory)
+	a.dbName = database.InMemory
 	return database.InMemory
 }
 

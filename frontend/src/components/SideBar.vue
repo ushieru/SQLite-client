@@ -33,7 +33,7 @@ const onSubmitNewDatabaseModal = (e) => {
                 <li @click="showNewDatabaseModal"><a>New database</a></li>
                 <li @click="store.openDatabase"><a>Open database</a></li>
                 <div class="divider m-0" />
-                <li><a>Close database</a></li>
+                <li @click="store.openInMemoryDatabase"><a>Close database</a></li>
             </ul>
         </div>
     </div>
