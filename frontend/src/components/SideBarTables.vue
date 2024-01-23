@@ -7,7 +7,7 @@ const onClickAutoQuery = (tableName, action) => {
     const tab = store.tabs.find(t => t.id == store.currentTabId)
     switch (action) {
         case 'C':
-            tab.query = `INSERT INTO \`${tableName}\` ()\nVALUES()`
+            tab.query = `INSERT INTO \`${tableName}\` ()\nVALUES ()`
             break;
         case 'R':
             tab.query = `SELECT * FROM \`${tableName}\`\nWHERE ? = ?`
