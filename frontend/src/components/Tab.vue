@@ -60,7 +60,8 @@ const extentions = [sql({ dialect: SQLite }), oneDark]
         <div class="divider"></div>
         <div class="card bg-base-100 shadow-xl">
             <div class="card-body">
-                <Table :tab="props.tab" />
+                <span v-if="props.tab.error">{{ props.tab.error }}</span>
+                <Table v-else :tab="props.tab" />
             </div>
         </div>
     </div>

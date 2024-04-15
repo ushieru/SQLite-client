@@ -9,7 +9,7 @@ export const useGlobalStore = defineStore('global', {
     state: () => ({
         currentTabId: 1,
         databaseName: ":memory:",
-        tabs: [new Tab("Tab 1", "", 1)],
+        tabs: [new Tab({ name: "Tab 1", query: "", id: 1 })],
         tables: [],
         views: [],
         triggers: [],
@@ -22,7 +22,7 @@ export const useGlobalStore = defineStore('global', {
         },
         newTab() {
             const name = `Tab ${this._internalTabConter}`
-            const tab = new Tab(name, "")
+            const tab = new Tab({ name, query: "" })
             this._internalTabConter++
             this.currentTabId = tab.id
             this.tabs.push(tab)
@@ -64,11 +64,14 @@ export const useGlobalStore = defineStore('global', {
         execRawQuery(tab) {
             ExecRawQuery(tab.query)
                 .then(result => {
+                    tab.error = null
                     tab.table = result
                 }).then(_ => {
                     if (tab.query.toLowerCase().includes("create")) {
                         this.refreshSidebar()
                     }
+                }).catch(error => {
+                    tab.error = error
                 })
         },
         newDatabase(databaseName) {
