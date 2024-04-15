@@ -24,8 +24,8 @@ const onSubmitNewDatabaseModal = (e) => {
 </script>
 
 <template>
-    <div class="flex justify-between items-center p-1">
-        <div class="badge badge-ghost py-6 rounded-lg w-full px-1 text-ellipsis">{{ store.databaseName }}</div>
+    <div class="flex justify-between items-center p-1 w-[200px]">
+        <p class="badge badge-ghost flex flex-shrink justify-start py-6 rounded-lg px-1 overflow-hidden" :title="store.databaseName">{{ store.databaseName }}</p>
         <div class="dropdown">
             <div tabindex="0" role="button" class="btn m-1">▼</div>
             <ul tabindex="0" class="dropdown-content z-10 menu p-2 shadow bg-base-100 rounded-box w-52">
